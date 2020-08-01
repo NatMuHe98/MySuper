@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "634967960123",
+    "firebase_url": "https://mysuper-34260.firebaseio.com",
+    "project_id": "mysuper-34260",
+    "storage_bucket": "mysuper-34260.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634967960123:android:897ac6cb1c3a90e7764a1e",
+        "android_client_info": {
+          "package_name": "com.example.mysuper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634967960123-55lt4s0umk19r74s6obq2vcf2qh3tfvi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhgM0-2AG6ydOQV5wbHRJSayrixqFAt7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634967960123-55lt4s0umk19r74s6obq2vcf2qh3tfvi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
