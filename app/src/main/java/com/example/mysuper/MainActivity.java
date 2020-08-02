@@ -11,6 +11,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -52,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
     private ProductoModel model;
 
     private ListView lv_producto;
+
     private String idUser = FirebaseAuth.getInstance().getUid();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference reference = database.getReference().child("Usuarios").child(idUser).child("Producto");
+    private DatabaseReference reference  =  database.getReference().child("Usuarios").child(idUser).child("Producto");;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,23 +66,6 @@ public class MainActivity extends AppCompatActivity {
         lv_producto = findViewById(R.id.lv_producto);
         list = new ArrayList<>();
         model = new ProductoModel();
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list = new ArrayList<>();
-                for(DataSnapshot child : dataSnapshot.getChildren()){
-                    model = child.getValue(ProductoModel.class);
-                    list.add(model);
-                }
-                lv_producto.setAdapter(new ProductoAdapter(MainActivity.this, list));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this,"Error Firebase", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -123,6 +108,36 @@ public class MainActivity extends AppCompatActivity {
         );
 
         iniciarSesion();
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list = new ArrayList<>();
+                for(DataSnapshot child : dataSnapshot.getChildren()){
+                    model = child.getValue(ProductoModel.class);
+                    list.add(model);
+                }
+                lv_producto.setAdapter(new ProductoAdapter(MainActivity.this, list));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this,"Error Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        lv_producto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                model = (ProductoModel) adapterView.getItemAtPosition(i);
+                if(!model.getId().equals("") && model.getId() != null){
+                    Intent editar = new Intent(MainActivity.this,EditarProducto.class);
+                    editar.putExtra("id", model.getId());
+                    startActivity(editar);
+                }
+            }
+        });
+
     }
 
     private void iniciarSesion() {
@@ -166,12 +181,6 @@ public class MainActivity extends AppCompatActivity {
             }
             if(resultCode == RESULT_OK){
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String idUser = FirebaseAuth.getInstance().getUid();
-
-                Map<String, Object> map = new HashMap<>();
-                map.put("name", user.getDisplayName());
-
-                mDatabase.child("Usuarios").child(idUser);
 
                 Toast.makeText(this, "" +user.getDisplayName(), Toast.LENGTH_SHORT).show();
                 btn_sign_out.setEnabled(true);

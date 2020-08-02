@@ -11,6 +11,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ModificarProducto"></activity>
+        <activity android:name=".EditarProducto" />
         <activity android:name=".NuevoProducto" />
         <activity android:name=".MainActivity">
             <intent-filter>
