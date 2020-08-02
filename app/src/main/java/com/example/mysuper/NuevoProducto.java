@@ -31,6 +31,7 @@ public class NuevoProducto extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Nuevo Producto");
         setContentView(R.layout.activity_nuevo_producto);
 
         editTextCantidad = (EditText) findViewById(R.id.editTextCantidad);
@@ -52,7 +53,7 @@ public class NuevoProducto extends AppCompatActivity {
         }else if(precio.isEmpty()){
             editTextPrecio.setError("Precio no debe quedar vacío");
         } else{
-            final Long total = Long.parseLong(cantidad) * Long.parseLong(precio);
+            final Double total = Double.parseDouble(cantidad) * Double.parseDouble(precio);
             String id = reference.push().getKey();
             if(id != null){
                 model = new ProductoModel(id, cantidad, producto, precio, String.valueOf(total));

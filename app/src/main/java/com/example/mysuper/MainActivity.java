@@ -44,9 +44,9 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int MY_REQUEST_CODE = 12;
+    private static final int MY_REQUEST_CODE = 16;
     List<AuthUI.IdpConfig> providers;
+
     Button btn_sign_out;
     ImageView btn_agregar_producto, btn_eliminar_lista;
     DatabaseReference mDatabase;
@@ -63,13 +63,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Mi Super");
         setContentView(R.layout.activity_main);
+
+        //Provedores de inicio de sesión
+        providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.FacebookBuilder().build()
+        );
+        
+        IniciarSesion();
 
         lv_producto = findViewById(R.id.lv_producto);
         list = new ArrayList<>();
         model = new ProductoModel();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         btn_agregar_producto = (ImageView) findViewById(R.id.imageView_agregar);
         btn_agregar_producto.setOnClickListener(new View.OnClickListener() {
@@ -87,29 +96,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AuthUI.getInstance()
                         .signOut(MainActivity.this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>(){
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 btn_sign_out.setEnabled(false);
-                                iniciarSesion();
+                                IniciarSesion();
                             }
-
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, ""+e.getMessage(),  Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
-
-        providers= Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build()
-        );
-
-        iniciarSesion();
+        
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -179,21 +180,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void iniciarSesion() {
+    private void IniciarSesion() {
         startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
+                AuthUI.getInstance().createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setTheme(R.style.MyBackground)
                         .setLogo(R.drawable.logo)
-                        .setAvailableProviders(providers)
-                        .setTheme(R.style.MyBackground)
-                        .build(),MY_REQUEST_CODE
+                .build(),MY_REQUEST_CODE
         );
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == MY_REQUEST_CODE){
+        if (requestCode == MY_REQUEST_CODE){
             IdpResponse response = IdpResponse.fromResultIntent(data);
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = firebaseAuth.getCurrentUser();
@@ -214,17 +214,16 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("infoApp","error al enviar el correo");
                             }
                         });
-                iniciarSesion();
+                IniciarSesion();
             }else{
 
             }
             if(resultCode == RESULT_OK){
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                Toast.makeText(this, "" +user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                btn_sign_out.setEnabled(true);
+                Toast.makeText(MainActivity.this, " "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                btn_agregar_producto.setEnabled(true);
             }else{
-                Toast.makeText(this, "" +response.getError().getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, " "+response.getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -34,6 +34,7 @@ public class EditarProducto extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Detalles Producto");
         setContentView(R.layout.activity_editar_producto);
 
         buttonEditar = findViewById(R.id.buttonEditar);

@@ -33,6 +33,7 @@ public class ModificarProducto extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Modificar Producto");
         setContentView(R.layout.activity_modificar_producto);
 
         textViewActualizarCantidad = findViewById(R.id.textViewActualizarCantidad);

@@ -154,15 +154,16 @@
 
         <TextView
             android:id="@+id/textViewProducto"
-            android:layout_width="178dp"
+            android:layout_width="181dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Producto" />
+            android:text="Producto"
+            android:textAlignment="viewStart" />
 
         <TextView
             android:id="@+id/textViewPrecio"
-            android:layout_width="wrap_content"
+            android:layout_width="51dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -170,7 +171,7 @@
 
         <TextView
             android:id="@+id/textView7"
-            android:layout_width="wrap_content"
+            android:layout_width="67dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
