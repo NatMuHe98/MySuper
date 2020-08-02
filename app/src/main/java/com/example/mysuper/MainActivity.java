@@ -11,12 +11,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mysuper.adapters.ProductoAdapter;
@@ -44,11 +49,18 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.salir, menu);
+        return true;
+    }
+
     private static final int MY_REQUEST_CODE = 16;
     List<AuthUI.IdpConfig> providers;
-
+    TextView textViewTotal, textViewRestante, textViewPresupuesto;
     Button btn_sign_out;
     ImageView btn_agregar_producto, btn_eliminar_lista;
+    String miPresupuesto = "0";
     DatabaseReference mDatabase;
 
     private ArrayList<ProductoModel> list;
@@ -58,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String idUser = FirebaseAuth.getInstance().getUid();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference reference  =  database.getReference().child("Usuarios").child(idUser).child("Producto");;
+    private DatabaseReference reference  =  database.getReference().child("Usuarios").child(idUser).child("Producto");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
         IniciarSesion();
 
         lv_producto = findViewById(R.id.lv_producto);
+        textViewTotal = findViewById(R.id.textViewTotal);
+        textViewPresupuesto = findViewById(R.id.textViewPresupuesto);
+        textViewRestante = findViewById(R.id.textViewRestante);
         list = new ArrayList<>();
         model = new ProductoModel();
 
@@ -89,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        btn_sign_out = (Button)findViewById(R.id.button_cerrar_sesion);
+/*
+        btn_sign_out = (Button)findViewById(R.id.btnSalir);
         btn_sign_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,18 +124,30 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        });
+        });*/
         
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list = new ArrayList<>();
-                for(DataSnapshot child : dataSnapshot.getChildren()){
-                    model = child.getValue(ProductoModel.class);
-                    list.add(model);
+                if (dataSnapshot.hasChildren()){
+                    list = new ArrayList<>();
+                    double total = 0;
+                    for(DataSnapshot child : dataSnapshot.getChildren()){
+                        model = child.getValue(ProductoModel.class);
+                        list.add(model);
+                        String subT = model.getTotal();
+                        total = total + Double.parseDouble(subT);
+                        textViewTotal.setText("$"+total);
+                        double rest = 0;
+                        String pres = (String) miPresupuesto;
+                        rest = Double.parseDouble(pres) - total;
+                        textViewRestante.setText("$"+rest);
+                    }
+                    lv_producto.setAdapter(new ProductoAdapter(MainActivity.this, list));
+                }else{
+                    textViewTotal.setText("$0");
                 }
-                lv_producto.setAdapter(new ProductoAdapter(MainActivity.this, list));
             }
 
             @Override
@@ -179,6 +206,55 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
+
+    public void CerrarSesion(MenuItem menuItem){
+        AuthUI.getInstance()
+                .signOut(MainActivity.this)
+                .addOnCompleteListener(new OnCompleteListener<Void>(){
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //btn_sign_out.setEnabled(false);
+                        IniciarSesion();
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, ""+e.getMessage(),  Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void AgregarPresupuesto(MenuItem menuItem){
+            AlertDialog.Builder presupuesto = new AlertDialog.Builder(MainActivity.this);
+            presupuesto.setTitle("Agregar presupuesto para sus compras");
+            final EditText presInput = new EditText(MainActivity.this);
+            presInput.setInputType(InputType.TYPE_CLASS_PHONE);
+            presupuesto.setView(presInput);
+            presupuesto.setCancelable(false);
+
+        presupuesto.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!presInput.getText().equals("")){
+                    miPresupuesto = presInput.getText().toString();
+                    textViewPresupuesto.setText("$"+miPresupuesto);
+                }else{
+                    Toast.makeText(MainActivity.this, "No se agregó Presupuesto", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        presupuesto.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        presupuesto.show();
+    };
+
 
     private void IniciarSesion() {
         startActivityForResult(

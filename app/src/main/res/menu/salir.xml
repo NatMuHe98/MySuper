@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btnPresupuesto"
+        android:icon="@drawable/ic_dinero"
+        android:onClick="AgregarPresupuesto"
+        android:title="Presupuesto"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/btnSalir"
+        android:icon="@drawable/ic_cerrar_sesion"
+        android:onClick="CerrarSesion"
+        android:title="Salir"
+        app:showAsAction="always" />
+
+</menu>
