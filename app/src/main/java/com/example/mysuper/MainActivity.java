@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_REQUEST_CODE = 12;
     List<AuthUI.IdpConfig> providers;
     Button btn_sign_out;
-    ImageView btn_agregar_producto;
+    ImageView btn_agregar_producto, btn_eliminar_lista;
     DatabaseReference mDatabase;
 
     private ArrayList<ProductoModel> list;
@@ -135,6 +135,26 @@ public class MainActivity extends AppCompatActivity {
                     editar.putExtra("id", model.getId());
                     startActivity(editar);
                 }
+            }
+        });
+
+        btn_eliminar_lista = (ImageView) findViewById(R.id.imageView_eliminar);
+        btn_eliminar_lista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    reference.removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(MainActivity.this, "Lista Eliminada", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("database", "no se pudo guardar");
+                                }
+                            });
             }
         });
 

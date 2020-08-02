@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mysuper.models.ProductoModel;
@@ -19,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class NuevoProducto extends AppCompatActivity {
     EditText editTextCantidad, editTextProducto, editTextPrecio;
+    TextView textViewTotal;
     String idUser = FirebaseAuth.getInstance().getUid();
 
     ProductoModel model;
@@ -34,6 +36,7 @@ public class NuevoProducto extends AppCompatActivity {
         editTextCantidad = (EditText) findViewById(R.id.editTextCantidad);
         editTextProducto = (EditText) findViewById(R.id.editTextProducto);
         editTextPrecio = (EditText) findViewById(R.id.editTextPrecio);
+        textViewTotal = (TextView) findViewById(R.id.textViewTotal);
 
     }
 
@@ -49,7 +52,7 @@ public class NuevoProducto extends AppCompatActivity {
         }else if(precio.isEmpty()){
             editTextPrecio.setError("Precio no debe quedar vacío");
         } else{
-            Long total = Long.parseLong(cantidad) * Long.parseLong(precio);
+            final Long total = Long.parseLong(cantidad) * Long.parseLong(precio);
             String id = reference.push().getKey();
             if(id != null){
                 model = new ProductoModel(id, cantidad, producto, precio, String.valueOf(total));

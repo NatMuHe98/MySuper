@@ -11,9 +11,12 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ModificarProducto"></activity>
-        <activity android:name=".EditarProducto" />
-        <activity android:name=".NuevoProducto" />
+        <activity android:name=".ModificarProducto"
+            android:parentActivityName=".EditarProducto"/>
+        <activity android:name=".EditarProducto"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".NuevoProducto"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
