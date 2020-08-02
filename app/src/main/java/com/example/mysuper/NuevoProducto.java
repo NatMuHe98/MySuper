@@ -19,9 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class NuevoProducto extends AppCompatActivity {
     EditText editTextCantidad, editTextProducto, editTextPrecio;
-
     String idUser = FirebaseAuth.getInstance().getUid();
-    //String textReferences = "Producto";
 
     ProductoModel model;
     FirebaseDatabase database = FirebaseDatabase.getInstance();

@@ -13,8 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.mysuper.adapters.ProductoAdapter;
+import com.example.mysuper.models.ProductoModel;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.firebase.ui.auth.AuthUI;
@@ -25,9 +28,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -39,13 +46,41 @@ public class MainActivity extends AppCompatActivity {
     List<AuthUI.IdpConfig> providers;
     Button btn_sign_out;
     ImageView btn_agregar_producto;
-
     DatabaseReference mDatabase;
+
+    private ArrayList<ProductoModel> list;
+    private ProductoModel model;
+
+    private ListView lv_producto;
+    private String idUser = FirebaseAuth.getInstance().getUid();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference reference = database.getReference().child("Usuarios").child(idUser).child("Producto");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        lv_producto = findViewById(R.id.lv_producto);
+        list = new ArrayList<>();
+        model = new ProductoModel();
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list = new ArrayList<>();
+                for(DataSnapshot child : dataSnapshot.getChildren()){
+                    model = child.getValue(ProductoModel.class);
+                    list.add(model);
+                }
+                lv_producto.setAdapter(new ProductoAdapter(MainActivity.this, list));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this,"Error Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
