@@ -14,12 +14,14 @@ import android.widget.Toast;
 import com.example.mysuper.models.ProductoModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class NuevoProducto extends AppCompatActivity {
-    EditText editTextCantidad, editTextProducto, editTextPrecio;
+    TextInputLayout editTextCantidad, editTextProducto, editTextPrecio;
     TextView textViewTotal;
     String idUser = FirebaseAuth.getInstance().getUid();
 
@@ -34,17 +36,17 @@ public class NuevoProducto extends AppCompatActivity {
         setTitle("Nuevo Producto");
         setContentView(R.layout.activity_nuevo_producto);
 
-        editTextCantidad = (EditText) findViewById(R.id.editTextCantidad);
-        editTextProducto = (EditText) findViewById(R.id.editTextProducto);
-        editTextPrecio = (EditText) findViewById(R.id.editTextPrecio);
+        editTextCantidad = (TextInputLayout) findViewById(R.id.editTextCantidad);
+        editTextProducto = (TextInputLayout) findViewById(R.id.editTextProducto);
+        editTextPrecio = (TextInputLayout) findViewById(R.id.editTextPrecio);
         textViewTotal = (TextView) findViewById(R.id.textViewTotal);
 
     }
 
     public void AgregarProducto(final View view){
-        String cantidad = editTextCantidad.getText().toString();
-        String producto = editTextProducto.getText().toString();
-        String  precio = editTextPrecio.getText().toString();
+        String cantidad = editTextCantidad.getEditText().getText().toString();
+        String producto = editTextProducto.getEditText().getText().toString();
+        String  precio = editTextPrecio.getEditText().getText().toString();
 
         if(cantidad.isEmpty()){
             editTextCantidad.setError("Cantidad no debe quedar vacío");

@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private String idUser ;
     private FirebaseDatabase database;
     private DatabaseReference reference;
-    private DatabaseReference ref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,36 +158,36 @@ public class MainActivity extends AppCompatActivity {
         btn_eliminar_lista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                alertDialog.setTitle("Eliminar Carrito de Compras");
-                alertDialog.setMessage("Se eliminaran todos sus productos agregador actualmente.");
-                alertDialog.setCancelable(false);
-                alertDialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Esto es para eliminar la lista completa
-                        reference.removeValue()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(MainActivity.this, "Lista Eliminada", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d("database", "no se pudo guardar");
-                                    }
-                                });
-                    }
-                });
-                alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                alertDialog.show();
+                new MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle("Eliminar Carrito de Compras")
+                        .setMessage("Se eliminaran todos sus productos agregados.")
+                        .setCancelable(false)
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Esto es para eliminar la lista completa
+                                reference.removeValue()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(MainActivity.this, "Lista Eliminada", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d("database", "no se pudo guardar");
+                                            }
+                                        });
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -213,14 +214,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AgregarPresupuesto(MenuItem menuItem){
-            AlertDialog.Builder presupuesto = new AlertDialog.Builder(MainActivity.this);
-            presupuesto.setTitle("Agregar presupuesto para sus compras");
-            final EditText presInput = new EditText(MainActivity.this);
-            presInput.setInputType(InputType.TYPE_CLASS_PHONE);
-            presupuesto.setView(presInput);
-            presupuesto.setCancelable(false);
+        MaterialAlertDialogBuilder pres = new MaterialAlertDialogBuilder(MainActivity.this)
+                .setTitle("Agregar presupuesto para sus compras");
+        final EditText presInput = new EditText(MainActivity.this);
+        presInput.setInputType(InputType.TYPE_CLASS_PHONE);
+        pres.setView(presInput);
+        pres.setCancelable(false);
 
-        presupuesto.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+        pres.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        })
+        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(!presInput.getText().equals("")){
@@ -230,14 +237,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "No se agregó Presupuesto", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-        presupuesto.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        presupuesto.show();
+        })
+        .show();
     };
 
 

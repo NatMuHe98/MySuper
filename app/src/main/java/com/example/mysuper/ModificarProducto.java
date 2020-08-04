@@ -79,9 +79,11 @@ public class ModificarProducto extends AppCompatActivity {
                     Long total = Long.parseLong(cantidad) * Long.parseLong(precio);
                     String id = model.getId();
                     if(id != null && !id.equals("")){
+                        final Double totalModificado = Double.parseDouble(cantidad) * Double.parseDouble(precio);
                         model.setCantidad(cantidad);
                         model.setProducto(producto);
                         model.setPrecio(precio);
+                        model.setTotal(String.valueOf(totalModificado));
                         reference.child(id).setValue(model)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override

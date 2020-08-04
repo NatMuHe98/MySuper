@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="64dp"
-        android:background="#D9E8EA"
+        android:background="#ffebee"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -54,29 +54,6 @@
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textViewTotal" />
-
-    <ImageView
-        android:id="@+id/imageView_agregar"
-        android:layout_width="44dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="#FFFEFE"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        app:srcCompat="@android:drawable/ic_menu_add" />
-
-    <ImageView
-        android:id="@+id/imageView_eliminar"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -146,8 +123,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Producto"
-            android:textAlignment="viewStart" />
+            android:text="Producto"/>
 
         <TextView
             android:id="@+id/textViewPrecio"
@@ -184,5 +160,27 @@
         android:text="$0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/lv_producto" />
+
+    <ImageView
+        android:id="@+id/imageView_eliminar"
+        android:layout_width="37dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:srcCompat="@drawable/ic_eliminar" />
+
+    <ImageView
+        android:id="@+id/imageView_agregar"
+        android:layout_width="37dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:srcCompat="@drawable/ic_agregar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

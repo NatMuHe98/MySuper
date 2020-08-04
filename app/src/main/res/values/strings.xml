@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">MiSuper</string>
+    <string name="app_name">Mi Super</string>
     <string name="facebook_application_id" translatable="false">2867634986856192</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb2867634986856192</string>
-    <string name="title_activity_editar_producto">EditarProducto</string>
+    <string name="title_activity_editar_producto">Editar Producto</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
