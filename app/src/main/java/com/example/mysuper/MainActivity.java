@@ -68,9 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView lv_producto;
 
-    private String idUser = FirebaseAuth.getInstance().getUid();
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference reference  =  database.getReference().child("Usuarios").child(idUser).child("Producto");
+    private String idUser ;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+    private DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         model = new ProductoModel();
 
+        idUser = FirebaseAuth.getInstance().getUid();
+        database = FirebaseDatabase.getInstance();
+        reference =  database.getReference().child("Usuarios").child(idUser).child("Producto");
+
 
         btn_agregar_producto = (ImageView) findViewById(R.id.imageView_agregar);
         btn_agregar_producto.setOnClickListener(new View.OnClickListener() {
@@ -104,28 +109,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-/*
-        btn_sign_out = (Button)findViewById(R.id.btnSalir);
-        btn_sign_out.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AuthUI.getInstance()
-                        .signOut(MainActivity.this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                btn_sign_out.setEnabled(false);
-                                IniciarSesion();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });*/
-        
+
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -155,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"Error Firebase", Toast.LENGTH_SHORT).show();
             }
         });
+
 
         lv_producto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
